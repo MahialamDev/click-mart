@@ -1,2 +1,9 @@
 @import "tailwindcss";
 
+.app-container{
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.full-screen {
+    @apply h-screen w-screen;
+}
