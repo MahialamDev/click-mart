@@ -101,7 +101,15 @@ const RegisterPage = () => {
   const handleFormSubmit = (data: RegisterFormData) => {
     console.log('Register Data Submitted:', data);
     if (data.profileImage && data.profileImage[0]) {
-      console.log('Uploaded Image File:', data.profileImage[0]);
+      const formData = new FormData();
+      formData.append('profileImage', data.profileImage[0]);
+      // Append other form data as needed
+      try {
+        // Example: Upload to Cloudinary or your backend
+        
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
     }
   };
 
