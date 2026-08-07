@@ -89,6 +89,7 @@ const CustomInput = ({
 
 const RegisterPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // State to manage loading
   const axiosInstance = useAxiosInstance(); // Custom hook for Axios instance
   const {
     register,
@@ -105,14 +106,10 @@ const RegisterPage = () => {
   };
 
   const handleFormSubmit = async (data: RegisterFormData) => {
-    console.log({
-  cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  preset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-});
-
     if (data.profileImage && data.profileImage[0]) {
       // Append other form data as needed
       try {
+        setLoading(true); // Set loading state to true when starting the request
         // Example: Upload to Cloudinary or your backend
         const formData = new FormData();
         formData.append("file", data.profileImage[0]);
@@ -121,15 +118,28 @@ const RegisterPage = () => {
           process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "default_preset",
         );
 
+        // Make the POST request to Cloudinary
         const imageRes = await axios.post(
           `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-
           formData,
         );
 
-        console.log("Image uploaded successfully:", imageRes.data);
+        const imageUrl = imageRes.data.secure_url;
+
+        const userData = {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          profileImageUrl: imageUrl, // Assuming your backend expects this field
+        };
+
+        // Send user data to your backend
+        const response = await axiosInstance.post("/api/users", userData);
+        console.log("User registered successfully:", response.data);
       } catch (error) {
         console.error("Error uploading image:", error);
+      } finally {
+        setLoading(false); // Reset loading state after the request is complete
       }
     }
   };
@@ -243,6 +253,7 @@ const RegisterPage = () => {
           <button
             type="submit"
             className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200"
+            disabled={loading}
           >
             Create Account
             <ArrowRight className="h-4 w-4" />
