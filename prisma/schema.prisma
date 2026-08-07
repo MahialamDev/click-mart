@@ -19,6 +19,7 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  imageUrl String?  // Optional field for profile image URL
   updatedAt DateTime @updatedAt
 }
 
