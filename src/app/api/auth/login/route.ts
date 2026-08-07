@@ -1,0 +1,46 @@
+import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { email, password } = body;
+    console.log(email, password);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return Response.json({
+        success: false,
+        message: "User Not Found.",
+      });
+    }
+
+    const matchedPassword = await bcrypt.compare(password, user.password);
+
+    if (!matchedPassword) {
+      return Response.json({
+        success: false,
+        message: "Invalid Password",
+      });
+    }
+
+    const sendUser = {
+      email: user.email,
+      name: user.name,
+      imageUrl: user.imageUrl,
+      createdAt: user.createdAt,
+    };
+
+    return Response.json({
+      success: true,
+      data: sendUser,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}

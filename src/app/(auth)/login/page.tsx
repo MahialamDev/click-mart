@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useForm, UseFormRegister, FieldErrors } from 'react-hook-form';
+import useAxiosInstance from '@/Hooks/useAxiosInstance';
 
 type FormData = {
   email: string;
@@ -74,14 +75,16 @@ const CustomInput = ({
 };
 
 const LoginPage = () => {
+  const axiosInstance = useAxiosInstance()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
-  const handleFormSubmit = (data: FormData) => {
-    console.log('Form submitted:', data);
+  const handleFormSubmit = async(data: FormData) => {
+    const loginRes = await axiosInstance.post(`/api/auth/login`, data)
+      console.log(loginRes)
   };
 
   return (
