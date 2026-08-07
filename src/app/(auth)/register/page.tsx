@@ -1,8 +1,10 @@
-'use client';
-import React, { useState, ChangeEvent } from 'react';
-import { Eye, EyeOff, ArrowRight, Camera, User } from 'lucide-react';
-import { useForm, UseFormRegister, FieldErrors } from 'react-hook-form';
-import GoogleLoginBtn from '@/components/UI/GoogleLoginBtn';
+"use client";
+import React, { useState, ChangeEvent } from "react";
+import { Eye, EyeOff, ArrowRight, Camera, User } from "lucide-react";
+import { useForm, UseFormRegister, FieldErrors } from "react-hook-form";
+import GoogleLoginBtn from "@/components/UI/GoogleLoginBtn";
+import useAxiosInstance from "@/Hooks/useAxiosInstance";
+import axios from "axios";
 
 type RegisterFormData = {
   name: string;
@@ -25,14 +27,14 @@ type CustomInputProps = {
 const CustomInput = ({
   label,
   name,
-  type = 'text',
+  type = "text",
   placeholder,
   required = false,
   register,
   errors,
 }: CustomInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const isPassword = type === 'password';
+  const isPassword = type === "password";
 
   return (
     <div className="space-y-1.5">
@@ -41,20 +43,20 @@ const CustomInput = ({
       </label>
       <div className="relative">
         <input
-          type={isPassword ? (showPassword ? 'text' : 'password') : type}
+          type={isPassword ? (showPassword ? "text" : "password") : type}
           placeholder={placeholder}
           {...register(name, {
             required: required ? `${label} is required` : false,
-            ...(type === 'email' && {
+            ...(type === "email" && {
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             }),
-            ...(type === 'password' && {
+            ...(type === "password" && {
               minLength: {
                 value: 6,
-                message: 'Password must be at least 6 characters',
+                message: "Password must be at least 6 characters",
               },
             }),
           })}
@@ -67,7 +69,11 @@ const CustomInput = ({
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
           >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         )}
       </div>
@@ -83,7 +89,7 @@ const CustomInput = ({
 
 const RegisterPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const axiosInstance = useAxiosInstance(); // Custom hook for Axios instance
   const {
     register,
     handleSubmit,
@@ -98,17 +104,32 @@ const RegisterPage = () => {
     }
   };
 
-  const handleFormSubmit = (data: RegisterFormData) => {
-    console.log('Register Data Submitted:', data);
+  const handleFormSubmit = async (data: RegisterFormData) => {
+    console.log({
+  cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  preset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+});
+
     if (data.profileImage && data.profileImage[0]) {
-      const formData = new FormData();
-      formData.append('profileImage', data.profileImage[0]);
       // Append other form data as needed
       try {
         // Example: Upload to Cloudinary or your backend
-        
+        const formData = new FormData();
+        formData.append("file", data.profileImage[0]);
+        formData.append(
+          "upload_preset",
+          process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "default_preset",
+        );
+
+        const imageRes = await axios.post(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+
+          formData,
+        );
+
+        console.log("Image uploaded successfully:", imageRes.data);
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       }
     }
   };
@@ -116,18 +137,19 @@ const RegisterPage = () => {
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-3xl border border-gray-100 shadow-xl">
-        
         {/* Header */}
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-extrabold text-gray-900">Create Account</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900">
+            Create Account
+          </h2>
           <p className="text-sm text-gray-500">
-            Join <span className="text-blue-600 font-semibold">ClickMart</span> and start shopping
+            Join <span className="text-blue-600 font-semibold">ClickMart</span>{" "}
+            and start shopping
           </p>
         </div>
 
         {/* Register Form */}
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
-          
           {/* Profile Image Select Option */}
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="relative w-24 h-24 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden group hover:border-blue-500 transition-colors">
@@ -140,7 +162,7 @@ const RegisterPage = () => {
               ) : (
                 <User className="w-10 h-10 text-gray-400" />
               )}
-              
+
               {/* Overlay Icon */}
               <label
                 htmlFor="profileImage"
@@ -154,7 +176,9 @@ const RegisterPage = () => {
               htmlFor="profileImage"
               className="text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer"
             >
-              {imagePreview ? 'Change Profile Picture' : 'Upload Profile Picture'}
+              {imagePreview
+                ? "Change Profile Picture"
+                : "Upload Profile Picture"}
             </label>
 
             <input
@@ -162,7 +186,7 @@ const RegisterPage = () => {
               type="file"
               accept="image/*"
               className="hidden"
-              {...register('profileImage', {
+              {...register("profileImage", {
                 onChange: handleImageChange,
               })}
             />
@@ -207,7 +231,7 @@ const RegisterPage = () => {
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
               />
               <span>
-                I agree to the{' '}
+                I agree to the{" "}
                 <a href="#" className="text-blue-600 hover:underline">
                   Terms of Service
                 </a>
@@ -227,14 +251,17 @@ const RegisterPage = () => {
 
         {/* Footer Link */}
         <p className="text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <a href="#" className="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
+          Already have an account?{" "}
+          <a
+            href="#"
+            className="font-semibold text-blue-600 hover:text-blue-500 transition-colors"
+          >
             Sign in
           </a>
         </p>
 
         <div>
-          <GoogleLoginBtn className="w-full"/>
+          <GoogleLoginBtn className="w-full" />
         </div>
       </div>
     </div>
