@@ -5,6 +5,10 @@ import { useForm, UseFormRegister, FieldErrors } from "react-hook-form";
 import GoogleLoginBtn from "@/components/UI/GoogleLoginBtn";
 import useAxiosInstance from "@/Hooks/useAxiosInstance";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
+
 
 type RegisterFormData = {
   name: string;
@@ -91,9 +95,11 @@ const RegisterPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // State to manage loading
   const axiosInstance = useAxiosInstance(); // Custom hook for Axios instance
+  const router = useRouter()
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
@@ -125,19 +131,26 @@ const RegisterPage = () => {
         );
 
         const imageUrl = imageRes.data.secure_url;
+        console.log(imageUrl)
 
         const userData = {
           name: data.name,
           email: data.email,
           password: data.password,
-          profileImageUrl: imageUrl, // Assuming your backend expects this field
+          imageUrl, // Assuming your backend expects this field
         };
 
         // Send user data to your backend
         const response = await axiosInstance.post("/api/users", userData);
-        console.log("User registered successfully:", response.data);
+        console.log(response)
+        if (response.data.success) { 
+          toast.success("Account created successfully!");
+          reset();
+          router.push("/login"); // Reset the form after successful submission
+        }
       } catch (error) {
         console.error("Error uploading image:", error);
+        toast.error("Failed to create account.");
       } finally {
         setLoading(false); // Reset loading state after the request is complete
       }
@@ -252,11 +265,12 @@ const RegisterPage = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200"
+            className={`w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={loading}
           >
-            Create Account
-            <ArrowRight className="h-4 w-4" />
+            {loading ? <p>Creating Account </p> : <p>Create Account</p>}
+            {loading ? <span className="loading loading-bars loading-xs"></span> : <ArrowRight className="h-4 w-4" />}
+           
           </button>
         </form>
 
