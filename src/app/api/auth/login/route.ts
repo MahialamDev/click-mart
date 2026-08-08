@@ -34,21 +34,22 @@ export async function POST(request: Request) {
     const sendUser = {
       email: user.email,
       name: user.name,
+      role: user.role,
       imageUrl: user.imageUrl,
       createdAt: user.createdAt,
     };
 
     //generate access token
-    const accessToken = generateAccessToken({
+    await generateAccessToken({
       userId: user.id,
       email: user.email,
-      role: 'user'
+      role: user.role
     })
 
-    const refreshToken = generateRefreshToken({
+    await generateRefreshToken({
       userId: user.id,
       email: user.email,
-      role: 'user'
+      role: user.role
     })
 
     return Response.json({
