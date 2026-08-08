@@ -1,7 +1,10 @@
 import React from 'react';
 import { ShoppingBag, ArrowRight, ShieldCheck, Truck, RefreshCw, Star } from 'lucide-react';
+import { getCurrentUser } from '@/lib/auth';
 
-const Hero = () => {
+const Hero = async() => {
+  const user = await getCurrentUser();
+  console.log(user, 'current')
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-white py-12 md:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +16,7 @@ const Hero = () => {
             {/* Promo Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold tracking-wide">
               <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full uppercase">New</span>
-              Summer Sale is Live — Up to 50% Off!
+              Summer Sale is Live — Up to 50% Off! { user?.email}
             </div>
 
             {/* Main Title */}
