@@ -1,3 +1,4 @@
+import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
@@ -13,10 +14,11 @@ export async function POST(request: Request) {
       },
     });
 
+    // if not found users
     if (!user) {
       return Response.json({
         success: false,
-        message: "User Not Found.",
+        message: "Invalid Email or Password",
       });
     }
 
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
     if (!matchedPassword) {
       return Response.json({
         success: false,
-        message: "Invalid Password",
+        message: "Invalid Email or Password",
       });
     }
 
@@ -35,6 +37,19 @@ export async function POST(request: Request) {
       imageUrl: user.imageUrl,
       createdAt: user.createdAt,
     };
+
+    //generate access token
+    const accessToken = generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      role: 'user'
+    })
+
+    const refreshToken = generateRefreshToken({
+      userId: user.id,
+      email: user.email,
+      role: 'user'
+    })
 
     return Response.json({
       success: true,
