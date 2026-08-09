@@ -19,6 +19,7 @@ const RefreshPage = () => {
 
     refreshToken();
   }, [axiosInstance]);
+  // ok
 
   return <div>refresh</div>;
 };
