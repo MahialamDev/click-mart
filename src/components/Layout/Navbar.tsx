@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { ShoppingCart, Search, User, Menu, X, Heart } from 'lucide-react';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,9 +49,9 @@ const Navbar = () => {
                 0
               </span>
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">
+            <Link href="" className="text-gray-700 hover:text-blue-600">
               <User className="h-6 w-6" />
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -83,11 +84,11 @@ const Navbar = () => {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           </div>
           <div className="flex flex-col space-y-2 text-base font-medium text-gray-700">
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Home</a>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Categories</a>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Deals</a>
+            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Home</Link>
+            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Categories</Link>
+            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Deals</Link>
             <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Wishlist</a>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Account</a>
+            <Link href="/login" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Account</Link>
           </div>
         </div>
       )}

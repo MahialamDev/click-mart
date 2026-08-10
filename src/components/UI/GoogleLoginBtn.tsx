@@ -1,3 +1,4 @@
+import { signIn } from 'next-auth/react';
 import React from 'react';
 
 type GoogleLoginBtnProps = {
@@ -6,8 +7,9 @@ type GoogleLoginBtnProps = {
 
 const GoogleLoginBtn = ({ className = '' }: GoogleLoginBtnProps) => {
 
-    const handleGoogleSignIn = () => {
-        console.log('Google Sign-In Clicked');
+    const handleGoogleSignIn = async() => {
+      console.log('Google Sign-In Clicked');
+         await signIn("google")
      }
 
   return (
