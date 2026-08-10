@@ -1,12 +1,16 @@
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from 'next-auth/react';
+import React from 'react';
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
-  return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  )
+interface Props {
+  children: React.ReactNode;
 }
+
+const NextAuthProvider = ({children}:Props) => {
+    return (
+        <SessionProvider>
+            {children}
+        </SessionProvider>
+    );
+};
+
+export default NextAuthProvider;

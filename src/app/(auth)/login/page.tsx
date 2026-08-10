@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useForm, UseFormRegister, FieldErrors } from 'react-hook-form';
 import useAxiosInstance from '@/Hooks/useAxiosInstance';
+import GoogleLoginBtn from '@/components/UI/GoogleLoginBtn';
 
 type FormData = {
   email: string;
@@ -151,6 +152,8 @@ const LoginPage = () => {
             Create one now
           </a>
         </p>
+
+        <GoogleLoginBtn />
       </div>
     </div>
   );

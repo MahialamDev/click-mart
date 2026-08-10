@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import { Toaster } from "react-hot-toast";
+import NextAuthProvider from "@/Provider/NextAuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: {
@@ -83,8 +83,6 @@ export const metadata: Metadata = {
   },
 };
 
-
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -92,12 +90,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex-1">
-          {children}
-          <Toaster  position="top-right" />
-        </main>
-        <Footer />
+        <NextAuthProvider>
+          <Navbar />
+          <main className="flex-1">
+            {children}
+            <Toaster position="top-right" />
+          </main>
+          <Footer />
+        </NextAuthProvider>
       </body>
     </html>
   );
