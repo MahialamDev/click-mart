@@ -1,7 +1,8 @@
 import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
 import prisma from "@/lib/prisma";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
+import type { User, Account, Profile } from "next-auth";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -15,7 +16,11 @@ export const authOptions = {
   ],
 
   callbacks:{ 
-    async signIn({ user }) { 
+    async signIn({ user }: {
+      user: User;
+    account: Account | null;
+    profile?: Profile;
+    }) { 
        if (!user.email) {
         return false;
       }
@@ -33,7 +38,7 @@ export const authOptions = {
           data: {
             name: user.name || "Google User",
             email: user.email,
-            password: user.password || "",
+            password: "",
             imageUrl: user.image || null,
           },
         });
