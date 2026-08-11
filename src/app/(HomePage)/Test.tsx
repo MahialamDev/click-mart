@@ -9,7 +9,8 @@ export default function Test() {
   console.log("session:", session);
 
   return (
-    <div>
+    <div className="w-full bg-green-300">
+      this is test
       <p>Status: {status}</p>
       <p>{session?.user?.email}</p>
     </div>
