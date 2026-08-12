@@ -15,17 +15,20 @@ export const authOptions = {
     }),
   ],
 
-  callbacks:{ 
-    async signIn({ user }: {
+  // callback
+  callbacks: {
+    async signIn({
+      user,
+    }: {
       user: User;
-    account: Account | null;
-    profile?: Profile;
-    }) { 
-       if (!user.email) {
+      account: Account | null;
+      profile?: Profile;
+    }) {
+      if (!user.email) {
         return false;
       }
 
-       // 1. Check user in DB
+      // 1. Check user in DB
       let dbUser = await prisma.user.findUnique({
         where: {
           email: user.email,
@@ -44,7 +47,7 @@ export const authOptions = {
         });
       }
 
-       // 3. Generate YOUR JWT
+      // 3. Generate YOUR JWT
       await generateAccessToken({
         userId: dbUser.id,
         email: dbUser.email,
@@ -58,13 +61,11 @@ export const authOptions = {
       });
 
       return true;
-
-
-
-    }
-  }
+    },
+  },
 };
 
+//
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
