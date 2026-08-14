@@ -38,3 +38,34 @@ export async function getCurrentUser() {
 
   return decodedRefresh;
 }
+
+
+  
+//client call
+export async function currentUser() {
+  const cookieStore = await cookies();
+
+  const accessToken = cookieStore.get("accessToken")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  if (accessToken) {
+    const decoded = verifyAccessToken(accessToken);
+
+    if (decoded) {
+      return decoded;
+    }
+  }
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  const decodedRefresh = verifyRefreshToken(refreshToken);
+
+  if (!decodedRefresh) {
+    return null;
+  }
+
+  return decodedRefresh;
+}
+  

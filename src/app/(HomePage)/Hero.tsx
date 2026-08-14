@@ -1,10 +1,10 @@
 import React from 'react';
 import { ShoppingBag, ArrowRight, ShieldCheck, Truck, RefreshCw, Star } from 'lucide-react';
-import { getCurrentUser } from '@/lib/auth';
+import { currentUser } from '@/lib/auth';
+
 
 const Hero = async() => {
-  const user = await getCurrentUser();
-  console.log(user, 'current')
+  const user = await currentUser();
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-white py-12 md:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
