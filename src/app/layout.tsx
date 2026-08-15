@@ -5,6 +5,8 @@ import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "@/Provider/NextAuthProvider";
+import ReduxProvider from "@/Provider/ReduxProvider";
+import AuthInitializer from "@/Provider/AuthInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -91,12 +93,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <NextAuthProvider>
-          <Navbar />
-          <main className="flex-1">
-            {children}
-            <Toaster position="top-right" />
-          </main>
-          <Footer />
+          <ReduxProvider>
+            <AuthInitializer />
+            <Navbar />
+            <main className="flex-1">
+              {children}
+              <Toaster position="top-right" />
+            </main>
+            <Footer />
+          </ReduxProvider>
         </NextAuthProvider>
       </body>
     </html>

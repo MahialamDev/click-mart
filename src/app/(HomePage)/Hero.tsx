@@ -1,14 +1,19 @@
-
-import React from 'react';
+'use client'
+import React, { useEffect, useState } from 'react';
 import { ShoppingBag, ArrowRight, ShieldCheck, Truck, RefreshCw, Star } from 'lucide-react';
 import { currentUser } from '@/lib/client-auth';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 
 
 
-const Hero = async() => {
-  const user = await currentUser()
+const Hero = () => {
+
+  const user = useSelector((state: RootState) => state.auth.user)
   console.log(user)
+  
+  
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-white py-12 md:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +25,7 @@ const Hero = async() => {
             {/* Promo Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold tracking-wide">
               <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full uppercase">New</span>
-              Summer Sale is Live — Up to 50% Off! { user?.email}
+              Summer Sale is Live — Up to 50% Off! { user?.name}
             </div>
 
             {/* Main Title */}
