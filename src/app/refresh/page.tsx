@@ -1,6 +1,6 @@
 "use client";
 
-import useAxiosInstance from "@/Hooks/useAxiosInstance";
+import useAxiosInstance from "@/Hooks/axiosInstance";
 import React, { useEffect } from "react";
 
 const RefreshPage = () => {

@@ -1,19 +1,64 @@
-'use client';
-import React, { useState } from 'react';
-import { ShoppingCart, Search, User, Menu, X, Heart } from 'lucide-react';
-import Link from 'next/link';
+"use client";
+import React, { useState } from "react";
+import { ShoppingCart, Search, User, Menu, X, Heart } from "lucide-react";
+import Link from "next/link";
+import { router } from "next/client";
+import { useRouter } from "next/navigation";
+
+const links = (
+  <>
+    <Link
+      href="/"
+      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
+    >
+      Home
+    </Link>
+    <Link
+      href="/categories"
+      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
+    >
+      Categories
+    </Link>
+    <Link
+      href="deals"
+      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
+    >
+      Deals
+    </Link>
+    <Link
+      href="wishlist"
+      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
+    >
+      Wishlist
+    </Link>
+    <Link
+      href="/login"
+      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
+    >
+      Account
+    </Link>
+  </>
+);
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+  const router = useRouter();
+  const handleLogout = async () => {
+   
+    router.push("/login");
+    router.refresh();
+  };
+
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <a href="#" className="text-2xl font-bold text-gray-900 flex items-center gap-1">
+            <a
+              href="#"
+              className="text-2xl font-bold text-gray-900 flex items-center gap-1"
+            >
               Click<span className="text-blue-600">Mart</span>
             </a>
           </div>
@@ -31,12 +76,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-8 text-sm font-medium text-gray-700">
-            <a href="#" className="hover:text-blue-600 transition-colors">Home</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Categories</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Deals</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">New Arrivals</a>
-          </div>
+          <div className="hidden lg:flex items-center space-x-8 text-sm font-medium text-gray-700">{links}</div>
 
           {/* Right Action Icons */}
           <div className="hidden md:flex items-center space-x-6">
@@ -66,7 +106,11 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -83,13 +127,7 @@ const Navbar = () => {
             />
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           </div>
-          <div className="flex flex-col space-y-2 text-base font-medium text-gray-700">
-            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Home</Link>
-            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Categories</Link>
-            <Link href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Deals</Link>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Wishlist</a>
-            <Link href="/login" className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600">Account</Link>
-          </div>
+          <div className="flex flex-col space-y-2 text-base font-medium text-gray-700">{links}</div>
         </div>
       )}
     </nav>

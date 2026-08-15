@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useForm, UseFormRegister, FieldErrors } from 'react-hook-form';
-import useAxiosInstance from '@/Hooks/useAxiosInstance';
+import useAxiosInstance from '@/Hooks/axiosInstance';
 import GoogleLoginBtn from '@/components/UI/GoogleLoginBtn';
 
 type FormData = {

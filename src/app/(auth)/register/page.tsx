@@ -3,7 +3,7 @@ import React, { useState, ChangeEvent } from "react";
 import { Eye, EyeOff, ArrowRight, Camera, User } from "lucide-react";
 import { useForm, UseFormRegister, FieldErrors } from "react-hook-form";
 import GoogleLoginBtn from "@/components/UI/GoogleLoginBtn";
-import useAxiosInstance from "@/Hooks/useAxiosInstance";
+import useAxiosInstance from "@/Hooks/axiosInstance";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
