@@ -1,19 +1,45 @@
-// client logout
-export async function logoutUser() {
-  const cookieStore = await cookies();
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-  // Own JWT authentication
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
+export async function POST() {
+  try {
+    const cookieStore = await cookies();
 
-  // NextAuth
-  cookieStore.delete("next-auth.session-token");
-  cookieStore.delete("__Secure-next-auth.session-token");
+    // =========================
+    // Own JWT Authentication
+    // =========================
 
-  cookieStore.delete("next-auth.callback-url");
-  cookieStore.delete("__Secure-next-auth.callback-url");
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
 
-  cookieStore.delete("next-auth.csrf-token");
-  cookieStore.delete("__Host-next-auth.csrf-token");
+    // =========================
+    // NextAuth Cookies
+    // =========================
+
+    cookieStore.delete("next-auth.session-token");
+    cookieStore.delete("__Secure-next-auth.session-token");
+
+    cookieStore.delete("next-auth.callback-url");
+    cookieStore.delete("__Secure-next-auth.callback-url");
+
+    cookieStore.delete("next-auth.csrf-token");
+    cookieStore.delete("__Host-next-auth.csrf-token");
+
+    return NextResponse.json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("LOGOUT ERROR:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Logout failed",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
-  

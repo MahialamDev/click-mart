@@ -1,42 +1,48 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import { ShoppingBag, ArrowRight, ShieldCheck, Truck, RefreshCw, Star } from 'lucide-react';
-import { currentUser } from '@/lib/client-auth';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import {
+  ShoppingBag,
+  ArrowRight,
+  ShieldCheck,
+  Truck,
+  RefreshCw,
+  Star,
+} from "lucide-react";
 
-
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const Hero = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
-  const user = useSelector((state: RootState) => state.auth.user)
-  console.log(user)
-  
-  
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-white py-12 md:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
           {/* Left Column: Headline & CTA */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            
             {/* Promo Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold tracking-wide">
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full uppercase">New</span>
-              Summer Sale is Live — Up to 50% Off! { user?.name}
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full uppercase">
+                New
+              </span>
+              Summer Sale is Live — Up to 50% Off! {loading ? "Loading..." : user?.name}
             </div>
 
             {/* Main Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
               Everything You Need, <br className="hidden sm:inline" />
-              Just a <span className="text-blue-600 underline decoration-blue-300 decoration-wavy">Click Away</span>
+              Just a{" "}
+              <span className="text-blue-600 underline decoration-blue-300 decoration-wavy">
+                Click Away
+              </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0">
-              Discover thousands of premium products across tech, fashion, home essentials, and more. Fast shipping and guaranteed best prices at ClickMart.
+              Discover thousands of premium products across tech, fashion, home
+              essentials, and more. Fast shipping and guaranteed best prices at
+              ClickMart.
             </p>
 
             {/* CTA Buttons */}
@@ -68,14 +74,17 @@ const Hero = () => {
                 <span className="font-bold text-gray-900 ml-1">4.9/5</span>
               </div>
               <span className="text-gray-300">|</span>
-              <p>Trusted by <span className="font-semibold text-gray-900">50,000+</span> happy shoppers</p>
+              <p>
+                Trusted by{" "}
+                <span className="font-semibold text-gray-900">50,000+</span>{" "}
+                happy shoppers
+              </p>
             </div>
           </div>
 
           {/* Right Column: Hero Visual Showcase */}
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              
               {/* Background Glow Effect */}
               <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-pulse"></div>
               <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-pulse delay-1000"></div>
@@ -96,11 +105,19 @@ const Hero = () => {
                 {/* Floating Product Highlight Card */}
                 <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-white/40 shadow-lg flex items-center justify-between">
                   <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">Featured Item</span>
-                    <h4 className="text-sm font-bold text-gray-900">Wireless Noise-Canceling Headphones</h4>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                      Featured Item
+                    </span>
+                    <h4 className="text-sm font-bold text-gray-900">
+                      Wireless Noise-Canceling Headphones
+                    </h4>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-lg font-bold text-gray-900">$199.99</span>
-                      <span className="text-xs text-gray-400 line-through">$285.00</span>
+                      <span className="text-lg font-bold text-gray-900">
+                        $199.99
+                      </span>
+                      <span className="text-xs text-gray-400 line-through">
+                        $285.00
+                      </span>
                     </div>
                   </div>
                   <button className="bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-xl transition-colors">
@@ -110,7 +127,6 @@ const Hero = () => {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Value Proposition Strip */}
@@ -120,7 +136,9 @@ const Hero = () => {
               <Truck className="h-6 w-6" />
             </div>
             <div>
-              <h4 className="font-bold text-gray-900 text-sm">Free Express Delivery</h4>
+              <h4 className="font-bold text-gray-900 text-sm">
+                Free Express Delivery
+              </h4>
               <p className="text-xs text-gray-500">On all orders over $50</p>
             </div>
           </div>
@@ -130,8 +148,12 @@ const Hero = () => {
               <ShieldCheck className="h-6 w-6" />
             </div>
             <div>
-              <h4 className="font-bold text-gray-900 text-sm">Secure Shopping</h4>
-              <p className="text-xs text-gray-500">100% protected online payments</p>
+              <h4 className="font-bold text-gray-900 text-sm">
+                Secure Shopping
+              </h4>
+              <p className="text-xs text-gray-500">
+                100% protected online payments
+              </p>
             </div>
           </div>
 
@@ -140,12 +162,15 @@ const Hero = () => {
               <RefreshCw className="h-6 w-6" />
             </div>
             <div>
-              <h4 className="font-bold text-gray-900 text-sm">30-Day Easy Returns</h4>
-              <p className="text-xs text-gray-500">Hassle-free money-back guarantee</p>
+              <h4 className="font-bold text-gray-900 text-sm">
+                30-Day Easy Returns
+              </h4>
+              <p className="text-xs text-gray-500">
+                Hassle-free money-back guarantee
+              </p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

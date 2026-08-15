@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useForm, UseFormRegister, FieldErrors } from 'react-hook-form';
-import useAxiosInstance from '@/Hooks/axiosInstance';
 import GoogleLoginBtn from '@/components/UI/GoogleLoginBtn';
+import axiosInstance from '@/Hooks/axiosInstance';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setLoading, setUser } from '@/redux/features/auth/authSlice';
 
 type FormData = {
   email: string;
@@ -76,16 +79,27 @@ const CustomInput = ({
 };
 
 const LoginPage = () => {
-  const axiosInstance = useAxiosInstance()
+ 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
+  const params = useSearchParams();
+  const router = useRouter();
+  const callbackUrl = params.get("callbackUrl") || "/";
+  const dispatch = useDispatch()
   const handleFormSubmit = async(data: FormData) => {
-    const loginRes = await axiosInstance.post(`/api/auth/login`, data)
-      console.log(loginRes)
+     await axiosInstance.post(`/auth/login`, data)
+     // Login হওয়ার পর current user আনো
+    const response = await axiosInstance.get("/auth/me");
+
+    dispatch(setUser(response.data.data));
+    dispatch(setLoading(false));
+    router.push(callbackUrl)
+  
+      
   };
 
   return (
