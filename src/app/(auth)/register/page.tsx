@@ -7,6 +7,7 @@ import useAxiosInstance from "@/Hooks/axiosInstance";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/Hooks/axiosInstance";
 
 
 
@@ -94,7 +95,6 @@ const CustomInput = ({
 const RegisterPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // State to manage loading
-  const axiosInstance = useAxiosInstance(); // Custom hook for Axios instance
   const router = useRouter()
   const {
     register,
