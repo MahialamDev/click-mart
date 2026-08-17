@@ -12,11 +12,12 @@ import {
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { logoutUser } from "@/lib/client-auth";
 import { logout } from "@/redux/features/auth/authSlice";
+import { MdDashboard } from "react-icons/md";
 
 const links = (
   <>
@@ -53,6 +54,8 @@ const links = (
   </>
 );
 
+const hiddenNav = ['/dashboard']
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
@@ -70,6 +73,11 @@ const Navbar = () => {
       console.log(err);
     }
   };
+
+  const pathname = usePathname();
+  if (hiddenNav.some((route) => pathname.startsWith(route))) { 
+    return null;
+  }
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -161,6 +169,15 @@ const Navbar = () => {
                       >
                         <User className="w-4 h-4 text-base-content/70" />
                         My Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/dashboard"
+                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
+                      >
+                        <MdDashboard className="w-4 h-4 text-base-content/70" />
+                        Dashboard
                       </Link>
                     </li>
                     <li>

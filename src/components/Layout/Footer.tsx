@@ -2,8 +2,15 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { usePathname } from 'next/navigation';
+
+const hiddenNav = ['/dashboard']
 
 const Footer = () => {
+    const pathname = usePathname();
+  if (hiddenNav.some((route) => pathname.startsWith(route))) { 
+    return null;
+  }
   return (
     <footer className="bg-gray-900 text-gray-300">
       {/* Main Footer Content */}
