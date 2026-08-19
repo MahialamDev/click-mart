@@ -21,7 +21,7 @@ interface NavigatorWithUAData extends Navigator {
   userAgentData?: UserAgentData;
 }
 
-export default function DeviceInfo2() {
+export default function DeviceInfo() {
   const [device, setDevice] = useState<DeviceInfo>({
     model: "",
     os: "",
