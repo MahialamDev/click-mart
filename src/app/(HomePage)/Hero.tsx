@@ -24,7 +24,7 @@ const Hero = () => {
             {/* Promo Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold tracking-wide">
               <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full uppercase">
-                New
+                New Page
               </span>
               Summer Sale is Live — Up to 50% Off! {loading ? "Loading..." : user?.name}
             </div>

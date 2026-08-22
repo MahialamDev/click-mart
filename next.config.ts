@@ -14,4 +14,6 @@ const nextConfig: NextConfig = {
   },
 };
 
+// einv file
+
 export default nextConfig;
