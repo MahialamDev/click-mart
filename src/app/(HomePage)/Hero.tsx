@@ -30,6 +30,8 @@ const Hero = () => {
               Summer Sale is Live — Up to 50% Off! {loading ? "Loading..." : user?.name}
             </div>
 
+            {/* add comment */}
+
             {/* Main Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
               Everything You Need, <br className="hidden sm:inline" />
