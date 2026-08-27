@@ -3,13 +3,14 @@ import React from 'react';
 
 type GoogleLoginBtnProps = {
   className?: string;
+  callbackUrl: string;
 };
 
-const GoogleLoginBtn = ({ className = '' }: GoogleLoginBtnProps) => {
+const GoogleLoginBtn = ({ className = '', callbackUrl }: GoogleLoginBtnProps) => {
 
     const handleGoogleSignIn = async() => {
       console.log('Google Sign-In Clicked');
-         await signIn("google")
+      await signIn("google", {callbackUrl: callbackUrl})
      }
 
   return (

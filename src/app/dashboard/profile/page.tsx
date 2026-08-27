@@ -50,8 +50,8 @@ const ProfilePage = () => {
     : "N/A";
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-50/50 py-8 sm:px-6 lg:px-8">
+      <div className=" space-y-8">
         
         {/* Main Profile Header Card */}
         <div className="bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden">

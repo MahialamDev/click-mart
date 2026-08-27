@@ -286,7 +286,7 @@ const RegisterPage = () => {
         </p>
 
         <div>
-          <GoogleLoginBtn className="w-full" />
+          <GoogleLoginBtn callbackUrl='/' className="w-full" />
         </div>
       </div>
     </div>

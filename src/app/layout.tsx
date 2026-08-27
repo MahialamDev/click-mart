@@ -42,12 +42,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://www.clickmart.com"), // Replace with your production domain
+  metadataBase: new URL("https://click-mart-bd.vercel.app"), // Replace with your production domain
   openGraph: {
     title: "ClickMart — Everything You Need, Just a Click Away",
     description:
       "Shop top-quality products with express shipping, exclusive discounts, and 100% secure checkout.",
-    url: "https://www.clickmart.com",
+    url: "https://click-mart-bd.vercel.app",
     siteName: "ClickMart",
     images: [
       {

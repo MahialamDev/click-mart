@@ -1,6 +1,7 @@
 import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -31,7 +32,20 @@ export async function POST(request: Request) {
       });
     }
 
-    const sendUser = {
+    //generate access token
+    const accessToken = await generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+    const refreshToken = await generateRefreshToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+    const userInfo = {
       email: user.email,
       name: user.name,
       role: user.role,
@@ -39,23 +53,28 @@ export async function POST(request: Request) {
       createdAt: user.createdAt,
     };
 
-    //generate access token
-    await generateAccessToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role
-    })
-
-    await generateRefreshToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role
-    })
-
-    return Response.json({
+    const response = NextResponse.json({
       success: true,
-      data: sendUser,
+      data: userInfo,
     });
+
+    response.cookies.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 15,
+      path: "/",
+    });
+
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
+    return response;
   } catch (err) {
     console.log(err);
   }

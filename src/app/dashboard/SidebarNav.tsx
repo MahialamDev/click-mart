@@ -26,13 +26,17 @@ const SidebarNav = ({ links }: { links: SideLink[] }) => {
   }
     return (
          <div className="space-y-1.5">
-            {links.map((link) => {
-              const Icon = icons[link.icon];
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 font-medium text-sm transition-colors duration-200"
+        {links.map((link) => {
+          const Icon = icons[link.icon];
+          const isActive = link.href === '/dashboard'
+            ? pathName === '/dashboard'
+            : pathName.startsWith(link.href)
+            console.log(isActive, 'from is active', pathName, link.href)
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-blue-600' : 'text-slate-600 '} rounded-lg hover:text-blue-600 hover:bg-slate-100 font-medium text-sm transition-colors duration-200 `}
                 >
                   <Icon className="text-lg shrink-0" />
                   <span>{link.label}</span>

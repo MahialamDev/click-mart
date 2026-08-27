@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   Users,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type SideLink = {
   href: string;
@@ -36,6 +37,7 @@ interface MobileSideNavProps {
 const MobileSideNav = ({ links, onLogout }: MobileSideNavProps) => {
   const [showNav, setShowNav] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const pathName = usePathname()
 
   // Toggle Theme Logic
   const toggleTheme = () => {
@@ -126,12 +128,14 @@ const MobileSideNav = ({ links, onLogout }: MobileSideNavProps) => {
             </p>
             {links.map((link) => {
               const IconComponent = iconMap[link.icon] || LayoutDashboard;
+              const isActive = link.href === '/dashboard' 
+                              ? pathName === '/dashboard' : pathName.startsWith(link.href)
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setShowNav(false)}
-                  className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/60 dark:hover:bg-slate-800/80 font-medium text-sm transition-all"
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl ${isActive ? 'text-blue-600' : 'text-slate-600 '} dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/60 dark:hover:bg-slate-800/80 font-medium text-sm transition-all`}
                 >
                   <IconComponent size={18} className="text-slate-400 dark:text-slate-500" />
                   <span>{link.label}</span>

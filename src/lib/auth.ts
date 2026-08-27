@@ -9,6 +9,9 @@ export async function getCurrentUser() {
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
+   console.log("ACCESS TOKEN:", !!accessToken);
+  console.log("REFRESH TOKEN:", !!refreshToken);
+
   const findUser = async (id: string) => {
     const user = await prisma.user.findUnique({
       where: { id },

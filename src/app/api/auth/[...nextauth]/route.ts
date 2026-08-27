@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import type { User, Account, Profile } from "next-auth";
+import { cookies } from "next/headers";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -12,6 +13,11 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+      params: {
+        prompt: "select_account",
+      },
+    },
     }),
   ],
 
@@ -48,17 +54,37 @@ export const authOptions = {
       }
 
       // 3. Generate YOUR JWT
-      await generateAccessToken({
+      const accessToken = await generateAccessToken({
         userId: dbUser.id,
         email: dbUser.email,
         role: dbUser.role,
       });
 
-      await generateRefreshToken({
+      const refreshToken = await generateRefreshToken({
         userId: dbUser.id,
         email: dbUser.email,
         role: dbUser.role,
       });
+
+       // 4. Set your JWT cookies
+      const cookieStore = await cookies();
+
+      cookieStore.set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 15,
+        path: "/",
+      });
+
+      cookieStore.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+
 
       return true;
     },

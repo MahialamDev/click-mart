@@ -168,7 +168,7 @@ const LoginForm = () => {
           </Link>
         </p>
 
-        <GoogleLoginBtn />
+        <GoogleLoginBtn callbackUrl={callbackUrl} />
       </div>
     </div>
   );
