@@ -50,10 +50,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
         </div>
       </aside>
 
-      {/* Mobile Side nav */}
-      <div className="h-screen w-[75%] fixed top-0 left-0 border z-99">
-          
-      </div>
+      
 
       {/* Main Content Area */}
       <main className="md:ml-64 min-h-screen flex flex-col">
@@ -66,7 +63,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             </span>
           </h1>
 
-          <MobileSideNav />
+          <MobileSideNav links={renderLink} />
         </div>
 
         {/* Dynamic Children Content */}

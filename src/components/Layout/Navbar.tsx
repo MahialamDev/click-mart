@@ -230,6 +230,9 @@ const Navbar = () => {
                 0
               </span>
             </Link>
+
+            
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
@@ -240,6 +243,105 @@ const Navbar = () => {
                 <Menu className="h-6 w-6" />
               )}
             </button>
+
+            {loading ? (
+             <span className="loading loading-spinner text-primary"></span>
+            ) : user ? (
+              /* Profile Dropdown Start */
+              <div className="dropdown dropdown-end">
+                {/* Avatar Button */}
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn w-8.5 h-8.5 btn-ghost btn-circle avatar border-2 border-blue-500 bg-blue-100 hover:bg-blue-200 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                >
+                    <div className="text-blue-700 font-extrabold text-base uppercase relative overflow-hidden object-cover rounded-full">
+                      <Image
+                        src={`${user?.imageUrl}`}
+                        alt="image"
+                        width={30}
+                        height={30}
+                        className="w-full"
+                      />
+                    {/* {user?.name?.charAt(0) || "U"} */}
+                  </div>
+                </div>
+
+                {/* Dropdown Content */}
+                <div
+                  tabIndex={0}
+                  className="dropdown-content menu z-[50] mt-3 w-64 p-3 shadow-2xl bg-base-100 border border-base-200 rounded-2xl space-y-3"
+                >
+                  {/* User Header Info */}
+                  <div className="flex items-center gap-3 px-2 py-1">
+                    <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-lg shadow-md shrink-0">
+                      {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                    </div>
+                    <div className="overflow-hidden">
+                      <h4 className="font-bold text-base-content text-sm truncate leading-tight">
+                        {user?.name || "User Name"}
+                      </h4>
+                      <p className="text-xs text-base-content/60 truncate mt-0.5">
+                        {user?.email || "user@example.com"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="divider my-0 h-[1px] bg-base-200"></div>
+
+                  {/* Menu Items */}
+                  <ul className="menu p-0 gap-1 text-sm font-medium">
+                    <li>
+                      <Link
+                        href="/dashboard/profile"
+                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
+                      >
+                        <User className="w-4 h-4 text-base-content/70" />
+                        My Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/dashboard"
+                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
+                      >
+                        <MdDashboard className="w-4 h-4 text-base-content/70" />
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/settings"
+                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
+                      >
+                        <Settings className="w-4 h-4 text-base-content/70" />
+                        Settings
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <div className="divider my-0 h-[1px] bg-base-200"></div>
+
+                  {/* Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full btn btn-error btn-soft btn-sm flex items-center justify-center gap-2 rounded-xl text-xs font-semibold py-2.5"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Log Out
+                  </button>
+                </div>
+              </div>
+              /* Profile Dropdown End */
+            ) : (
+              <Link
+                href="/login"
+                className="text-gray-700 hover:text-blue-600 flex items-center justify-center"
+              >
+                <User className="h-6 w-6" />
+              </Link>
+            )}
+
           </div>
         </div>
       </div>
