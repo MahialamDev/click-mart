@@ -18,6 +18,7 @@ import { RootState } from "@/redux/store";
 import { logoutUser } from "@/lib/client-auth";
 import { logout } from "@/redux/features/auth/authSlice";
 import { MdDashboard } from "react-icons/md";
+import Image from "next/image";
 
 const links = (
   <>
@@ -133,9 +134,16 @@ const Navbar = () => {
                   role="button"
                   className="btn btn-ghost btn-circle avatar border-2 border-blue-500 bg-blue-100 hover:bg-blue-200 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                 >
-                  <span className="text-blue-700 font-extrabold text-base uppercase">
+                    <div className="text-blue-700 font-extrabold text-base uppercase relative overflow-hidden object-cover rounded-full">
+                      <Image
+                        src={`${user?.imageUrl}`}
+                        alt="image"
+                        width={40}
+                        height={40}
+                        className="w-full"
+                      />
                     {user?.name?.charAt(0) || "U"}
-                  </span>
+                  </div>
                 </div>
 
                 {/* Dropdown Content */}
@@ -164,7 +172,7 @@ const Navbar = () => {
                   <ul className="menu p-0 gap-1 text-sm font-medium">
                     <li>
                       <Link
-                        href="/profile"
+                        href="/dashboard/profile"
                         className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
                       >
                         <User className="w-4 h-4 text-base-content/70" />

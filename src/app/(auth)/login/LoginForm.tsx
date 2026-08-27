@@ -7,6 +7,7 @@ import axiosInstance from '@/Hooks/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setLoading, setUser } from '@/redux/features/auth/authSlice';
+import Link from 'next/link';
 
 type FormData = {
   email: string;
@@ -162,9 +163,9 @@ const LoginForm = () => {
         {/* Footer Link */}
         <p className="text-center text-sm text-gray-500">
           Don&apos;t have an account?{' '}
-          <a href="#" className="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
+          <Link href="/register" className="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
             Create one now
-          </a>
+          </Link>
         </p>
 
         <GoogleLoginBtn />

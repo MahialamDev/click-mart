@@ -141,7 +141,7 @@ const RegisterPage = () => {
         };
 
         // Send user data to your backend
-        const response = await axiosInstance.post("/api/auth/register", userData);
+        const response = await axiosInstance.post("/auth/register", userData);
         console.log(response)
         if (response.data.success) { 
           toast.success("Account created successfully!");
