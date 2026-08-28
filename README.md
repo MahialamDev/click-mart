@@ -1,6 +1,4 @@
-নিচে আপনার GitHub প্রজেক্টের জন্য একটি সম্পূর্ণ এবং পেশাদার **README.md** ফাইল দেওয়া হলো। এটি সরাসরি কপি করে আপনার ফাইলটিতে বসিয়ে দিতে পারেন:
 
-```markdown
 # ClickMart 🛒
 
 ClickMart is a modern, full-stack E-commerce web application built with Next.js App Router, Prisma ORM, and Redux Toolkit. It features secure authentication, dynamic product browsing, category filtering, cart management, and a user dashboard.
@@ -144,7 +142,5 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 ## 📄 License
 
 This project is open source and available under the [MIT License](https://www.google.com/search?q=LICENSE).
-
-```
 
 ```
