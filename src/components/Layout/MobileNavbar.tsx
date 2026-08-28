@@ -37,10 +37,10 @@ const iconMap = {
 interface MobileNavbarProps {
   user?: UserType | null;
   handleLogout: () => void;
-  links: SideLink[];
+  navLinks: SideLink[];
 }
 
-const MobileNavbar = ({ user, handleLogout, links = [] }: MobileNavbarProps) => {
+const MobileNavbar = ({ user, handleLogout, navLinks = [] }: MobileNavbarProps) => {
   const [showNav, setShowNav] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const pathName = usePathname();
@@ -270,7 +270,7 @@ const MobileNavbar = ({ user, handleLogout, links = [] }: MobileNavbarProps) => 
             {/* Default Pages Links */}
             <div className="pt-2 border-t border-gray-800/60 space-y-1">
               { 
-                links.map((link) => { 
+                navLinks.map((link) => { 
                   return (
                     <Link
                     key={link.href}

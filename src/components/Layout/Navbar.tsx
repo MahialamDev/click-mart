@@ -27,12 +27,14 @@ import Image from "next/image";
 import MobileNavbar from "./MobileNavbar";
 
 const hiddenNav = ["/dashboard"];
-const links = [
-  {href: '/', label: "Home"},
-  {href: '/catalog', label: "Catalog"},
-  {href: '/deals', label: "Deals"},
-  {href: '/contact', label: "Contact"},
-]
+export const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/products', label: 'All Products' },
+  { href: '/categories', label: 'Categories' },
+  { href: '/hot-deals', label: 'Hot Deals' },
+  { href: '/checkout', label: 'Checkout' },
+  { href: '/contact', label: 'Contact Us' },
+];
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -58,7 +60,7 @@ const Navbar = () => {
   }
 
   return (
-    <header className="w-full shadow-lg font-sans sticky top-0 z-100">
+    <header className="w-full md:shadow-lg font-sans sticky top-0 z-100">
       
       {/* ========================================================= */}
       {/* 1. DESKTOP LAYOUT (hidden md:block)                       */}
@@ -243,18 +245,13 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <nav className="flex items-center space-x-8 text-xs font-bold uppercase tracking-wider text-gray-300">
-              <Link href="/" className="hover:text-primary transition-colors">
-                Home
+              {navLinks.map((link) =>
+                <Link key={link.href} href={link.href} className="hover:text-primary transition-colors">
+                  { link.label}
               </Link>
-              <Link href="/catalog" className="hover:text-primary transition-colors">
-                Catalog
-              </Link>
-              <Link href="/deals" className="hover:text-primary transition-colors">
-                Deals
-              </Link>
-              <Link href="/contact" className="hover:text-primary transition-colors">
-                Contact
-              </Link>
+              )}
+              
+              
             </nav>
 
             {/* Helpline */}
@@ -270,7 +267,7 @@ const Navbar = () => {
       {/* ========================================================= */}
       {/* 2. MOBILE LAYOUT (block md:hidden)                       */}
       {/* ========================================================= */}
-      <MobileNavbar user={user} links={links} handleLogout={handleLogout} />
+      <MobileNavbar user={user} navLinks={navLinks} handleLogout={handleLogout} />
 
     </header>
   );

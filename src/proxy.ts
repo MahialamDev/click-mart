@@ -4,10 +4,18 @@ import { getCurrentUser } from "./lib/auth";
 
 // This function can be marked `async` if using `await` inside
 
-const adminRoutes = ["/about", "/dashboard"];
+const adminRoutes = [ "/dashboard"];
 export async function proxy(request: NextRequest) {
   const user = await getCurrentUser();
   const pathname = request.nextUrl.pathname;
+
+   // Logged-in user cannot access login/register
+  if (
+    user &&
+    (pathname === "/login" || pathname === "/register")
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
 
   if (adminRoutes.some((route) => pathname.startsWith(route))) { 
@@ -37,5 +45,5 @@ export async function proxy(request: NextRequest) {
 // export default function proxy(request: NextRequest) { ... }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/about/:path*"],
+  matcher: ["/dashboard/:path*", "/login/:path*", "/register/:path*" ],
 };

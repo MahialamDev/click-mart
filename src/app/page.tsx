@@ -1,7 +1,8 @@
 import React from 'react';
 import Hero from './(HomePage)/Hero';
-import Test from './(HomePage)/Test';
 import { getCurrentUser } from '@/lib/auth';
+import PopularProducts from './(HomePage)/PopularProducts';
+import SpecialBannersAndCategories from './(HomePage)/SpecialBannersAndCategories';
 
 const Home = () => {
   const user = getCurrentUser();
@@ -9,7 +10,8 @@ const Home = () => {
   return (
     <div>
       <Hero />
-      <Test />
+      <PopularProducts />
+      <SpecialBannersAndCategories />
     </div>
   );
 };
