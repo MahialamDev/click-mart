@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "@/Provider/NextAuthProvider";
 import ReduxProvider from "@/Provider/ReduxProvider";
 import AuthInitializer from "@/Provider/AuthInitializer";
+import MobileViewIcon from "@/components/Layout/MobileViewIcon";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,6 +102,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Toaster position="top-right" />
             </main>
             <Footer />
+            <MobileViewIcon />
           </ReduxProvider>
         </NextAuthProvider>
       </body>

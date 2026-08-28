@@ -8,15 +8,7 @@ const adminRoutes = [ "/dashboard"];
 export async function proxy(request: NextRequest) {
   const user = await getCurrentUser();
   const pathname = request.nextUrl.pathname;
-
-   // Logged-in user cannot access login/register
-  if (
-    user &&
-    (pathname === "/login" || pathname === "/register")
-  ) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
+  
 
   if (adminRoutes.some((route) => pathname.startsWith(route))) { 
     if (!user) {
