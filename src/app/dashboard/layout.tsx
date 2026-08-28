@@ -123,7 +123,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-              <h1 className="text-sm md:text-base font-semibold text-slate-800">
+              <h1 className="text-sm md:text-base font-semibold text-primary">
                 Welcome back,{" "}
                 <span className="text-indigo-600 font-bold ">
                   {user?.name || "User"}

@@ -41,9 +41,12 @@ const MobileSideNav = ({ links, onLogout }: MobileSideNavProps) => {
 
   // Toggle Theme Logic
   const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
-    document.documentElement.classList.toggle("dark");
-  };
+  setIsDarkMode((prev) => {
+    const newMode = !prev;
+    document.documentElement.setAttribute("data-theme", newMode ? "dark" : "light");
+    return newMode;
+  });
+};
 
   return (
     <>

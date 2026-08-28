@@ -10,6 +10,11 @@ import {
   Heart,
   Settings,
   LogOut,
+  Zap,
+  ChevronDown,
+  PhoneCall,
+  GitCompare,
+  LayoutGrid,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -19,50 +24,23 @@ import { logoutUser } from "@/lib/client-auth";
 import { logout } from "@/redux/features/auth/authSlice";
 import { MdDashboard } from "react-icons/md";
 import Image from "next/image";
+import MobileNavbar from "./MobileNavbar";
 
-const links = (
-  <>
-    <Link
-      href="/"
-      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
-    >
-      Home
-    </Link>
-    <Link
-      href="/categories"
-      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
-    >
-      Categories
-    </Link>
-    <Link
-      href="/deals"
-      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
-    >
-      Deals
-    </Link>
-    <Link
-      href="/wishlist"
-      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
-    >
-      Wishlist
-    </Link>
-    <Link
-      href="/login"
-      className="px-3 py-2 rounded-md hover:bg-gray-100 hover:text-blue-600"
-    >
-      Account
-    </Link>
-  </>
-);
-
-const hiddenNav = ['/dashboard']
+const hiddenNav = ["/dashboard"];
+const links = [
+  {href: '/', label: "Home"},
+  {href: '/catalog', label: "Catalog"},
+  {href: '/deals', label: "Deals"},
+  {href: '/contact', label: "Contact"},
+]
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const loading = useSelector((state: RootState) => state.auth.loading);
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     try {
@@ -75,294 +53,226 @@ const Navbar = () => {
     }
   };
 
-  const pathname = usePathname();
-  if (hiddenNav.some((route) => pathname.startsWith(route))) { 
+  if (hiddenNav.some((route) => pathname.startsWith(route))) {
     return null;
   }
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link
-              href="/"
-              className="text-2xl font-bold text-gray-900 flex items-center gap-1"
-            >
-              Click<span className="text-blue-600">Mart</span>
+    <header className="w-full shadow-lg font-sans sticky top-0 z-100">
+      
+      {/* ========================================================= */}
+      {/* 1. DESKTOP LAYOUT (hidden md:block)                       */}
+      {/* ========================================================= */}
+      <div className="hidden md:block">
+        
+        {/* Top Header Bar */}
+        <div className="bg-[#101827] text-gray-100 py-3.5 px-6 border-b border-gray-800">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
+            
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <span className="p-2 bg-primary text-[#101827] rounded-xl font-black shadow-md group-hover:scale-105 transition-transform">
+                <Zap className="h-5 w-5 fill-current" />
+              </span>
+              <span className="text-2xl font-black tracking-tight text-white">
+                CLICK<span className="text-primary">MART</span>
+              </span>
             </Link>
-          </div>
 
-          {/* Search Bar (Desktop) */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Search products, brands and categories..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            {/* Search Box */}
+            <div className="flex-1 max-w-2xl">
+              <div className="flex w-full bg-[#1E293B] border border-gray-700 rounded-xl overflow-hidden focus-within:border-primary transition-all">
+                <input
+                  type="text"
+                  placeholder="Search over 10,000+ tech & gadget products..."
+                  className="w-full px-4 py-2.5 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm"
+                />
+                <button className="bg-primary hover:bg-yellow-400 text-[#101827] font-extrabold px-6 py-2.5 text-xs tracking-wider uppercase flex items-center gap-2 transition-colors">
+                  <Search className="h-4 w-4" />
+                  <span>Search</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Icons & User Profile */}
+            <div className="flex items-center space-x-6">
+              
+              {/* Compare */}
+              <Link href="/compare" className="flex items-center gap-2 hover:text-primary transition-colors text-xs font-semibold group">
+                <div className="relative">
+                  <GitCompare className="h-5 w-5 text-gray-300 group-hover:text-primary" />
+                  <span className="absolute -top-2 -right-2 bg-primary text-[#101827] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                    0
+                  </span>
+                </div>
+                <span>Compare</span>
+              </Link>
+
+              {/* Wishlist */}
+              <Link href="/wishlist" className="flex items-center gap-2 hover:text-primary transition-colors text-xs font-semibold group">
+                <div className="relative">
+                  <Heart className="h-5 w-5 text-gray-300 group-hover:text-primary" />
+                  <span className="absolute -top-2 -right-2 bg-primary text-[#101827] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                    0
+                  </span>
+                </div>
+                <span>Wishlist</span>
+              </Link>
+
+              {/* Cart */}
+              <Link href="/cart" className="flex items-center gap-2 hover:text-primary transition-colors text-xs font-semibold group">
+                <div className="relative">
+                  <ShoppingCart className="h-5 w-5 text-gray-300 group-hover:text-primary" />
+                  <span className="absolute -top-2 -right-2 bg-primary text-[#101827] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                    0
+                  </span>
+                </div>
+                <span>My Cart</span>
+              </Link>
+
+              {/* Profile Dropdown */}
+              {loading ? (
+                <span className="loading loading-spinner text-primary"></span>
+              ) : user ? (
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="flex items-center gap-2.5 cursor-pointer bg-[#1E293B] hover:bg-gray-800 p-1.5 pr-3 rounded-full border border-gray-700 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full border-2 border-primary overflow-hidden relative bg-gray-700 flex items-center justify-center">
+                      {user?.imageUrl ? (
+                        <Image
+                          src={user.imageUrl}
+                          alt={user?.name || "User"}
+                          fill
+                          sizes="32px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-bold text-xs">
+                          {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold text-white max-w-[80px] truncate">
+                      {user?.name?.split(" ")[0]}
+                    </span>
+                    <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+                  </div>
+
+                  {/* Dark Theme Styled Profile Dropdown */}
+                  <div
+                    tabIndex={0}
+                    className="dropdown-content menu z-[60] mt-3 w-64 p-3 shadow-2xl bg-[#101827] text-white border border-gray-800 rounded-2xl space-y-3"
+                  >
+                    <div className="flex items-center gap-3 px-2 py-1">
+                      <div className="w-10 h-10 rounded-full bg-primary text-[#101827] font-bold flex items-center justify-center text-lg shadow-md shrink-0">
+                        {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                      </div>
+                      <div className="overflow-hidden">
+                        <h4 className="font-bold text-sm truncate text-white">
+                          {user?.name || "User Name"}
+                        </h4>
+                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                          {user?.email || "user@example.com"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="divider my-0 h-[1px] bg-gray-800"></div>
+
+                    <ul className="menu p-0 gap-1 text-xs font-semibold">
+                      <li>
+                        <Link href="/dashboard/profile" className="py-2.5 px-3 rounded-xl hover:bg-[#1E293B] hover:text-primary transition-colors">
+                          <User className="w-4 h-4 text-gray-400" />
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/dashboard" className="py-2.5 px-3 rounded-xl hover:bg-[#1E293B] hover:text-primary transition-colors">
+                          <MdDashboard className="w-4 h-4 text-gray-400" />
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/settings" className="py-2.5 px-3 rounded-xl hover:bg-[#1E293B] hover:text-primary transition-colors">
+                          <Settings className="w-4 h-4 text-gray-400" />
+                          Settings
+                        </Link>
+                      </li>
+                    </ul>
+
+                    <div className="divider my-0 h-[1px] bg-gray-800"></div>
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full btn btn-error btn-soft btn-sm flex items-center justify-center gap-2 rounded-xl text-xs font-bold py-2.5"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Log Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <Link href="/login" className="flex items-center gap-2 hover:text-primary transition-colors text-xs font-semibold group">
+               
+                  <User className="h-5 w-5 text-gray-300 group-hover:text-primary" />
+                  
+                
+                <span>Account</span>
+              </Link>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        {/* Sticky Desktop Bottom Navbar */}
+        <div className="sticky top-0 z-50 bg-[#1E293B] text-white border-b border-gray-800 shadow-md">
+          <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-13">
+            
+            {/* Sticky Shop By Category */}
+            <div className="relative">
+              <button className="bg-primary text-[#101827] font-black px-5 py-3 rounded-t-lg flex items-center gap-2.5 hover:bg-yellow-400 transition-colors text-xs uppercase tracking-wider">
+                <LayoutGrid className="h-4 w-4" />
+                <span>Shop By Categories</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="flex items-center space-x-8 text-xs font-bold uppercase tracking-wider text-gray-300">
+              <Link href="/" className="hover:text-primary transition-colors">
+                Home
+              </Link>
+              <Link href="/catalog" className="hover:text-primary transition-colors">
+                Catalog
+              </Link>
+              <Link href="/deals" className="hover:text-primary transition-colors">
+                Deals
+              </Link>
+              <Link href="/contact" className="hover:text-primary transition-colors">
+                Contact
+              </Link>
+            </nav>
+
+            {/* Helpline */}
+            <div className="flex items-center gap-2 text-xs font-bold text-gray-300">
+              <PhoneCall className="h-4 w-4 text-primary" />
+              <span>Need Help? (+880) 1234-567890</span>
             </div>
           </div>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-8 text-sm font-medium text-gray-700">
-            {links}
-          </div>
-
-          {/* Right Action Icons */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link href="/wishlist" className="text-gray-700 hover:text-blue-600 relative">
-              <Heart className="h-6 w-6" />
-            </Link>
-            <Link href="/cart" className="text-gray-700 hover:text-blue-600 relative">
-              <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                0
-              </span>
-            </Link>
-
-            {loading ? (
-             <span className="loading loading-spinner text-primary"></span>
-            ) : user ? (
-              /* Profile Dropdown Start */
-              <div className="dropdown dropdown-end">
-                {/* Avatar Button */}
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar border-2 border-blue-500 bg-blue-100 hover:bg-blue-200 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                >
-                    <div className="text-blue-700 font-extrabold text-base uppercase relative overflow-hidden object-cover rounded-full">
-                      <Image
-                        src={`${user?.imageUrl}`}
-                        alt="image"
-                        width={40}
-                        height={40}
-                        className="w-full"
-                      />
-                    {user?.name?.charAt(0) || "U"}
-                  </div>
-                </div>
-
-                {/* Dropdown Content */}
-                <div
-                  tabIndex={0}
-                  className="dropdown-content menu z-[50] mt-3 w-64 p-3 shadow-2xl bg-base-100 border border-base-200 rounded-2xl space-y-3"
-                >
-                  {/* User Header Info */}
-                  <div className="flex items-center gap-3 px-2 py-1">
-                    <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-lg shadow-md shrink-0">
-                      {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                    </div>
-                    <div className="overflow-hidden">
-                      <h4 className="font-bold text-base-content text-sm truncate leading-tight">
-                        {user?.name || "User Name"}
-                      </h4>
-                      <p className="text-xs text-base-content/60 truncate mt-0.5">
-                        {user?.email || "user@example.com"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="divider my-0 h-[1px] bg-base-200"></div>
-
-                  {/* Menu Items */}
-                  <ul className="menu p-0 gap-1 text-sm font-medium">
-                    <li>
-                      <Link
-                        href="/dashboard/profile"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <User className="w-4 h-4 text-base-content/70" />
-                        My Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/dashboard"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <MdDashboard className="w-4 h-4 text-base-content/70" />
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/settings"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <Settings className="w-4 h-4 text-base-content/70" />
-                        Settings
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <div className="divider my-0 h-[1px] bg-base-200"></div>
-
-                  {/* Logout Button */}
-                  <button
-                    onClick={handleLogout}
-                    className="w-full btn btn-error btn-soft btn-sm flex items-center justify-center gap-2 rounded-xl text-xs font-semibold py-2.5"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Log Out
-                  </button>
-                </div>
-              </div>
-              /* Profile Dropdown End */
-            ) : (
-              <Link
-                href="/login"
-                className="text-gray-700 hover:text-blue-600 flex items-center justify-center"
-              >
-                <User className="h-6 w-6" />
-              </Link>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center space-x-4">
-            <Link href="/cart" className="text-gray-700 relative">
-              <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                0
-              </span>
-            </Link>
-
-            
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-
-            {loading ? (
-             <span className="loading loading-spinner text-primary"></span>
-            ) : user ? (
-              /* Profile Dropdown Start */
-              <div className="dropdown dropdown-end">
-                {/* Avatar Button */}
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn w-8.5 h-8.5 btn-ghost btn-circle avatar border-2 border-blue-500 bg-blue-100 hover:bg-blue-200 transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                >
-                    <div className="text-blue-700 font-extrabold text-base uppercase relative overflow-hidden object-cover rounded-full">
-                      <Image
-                        src={`${user?.imageUrl}`}
-                        alt="image"
-                        width={30}
-                        height={30}
-                        className="w-full"
-                      />
-                    {/* {user?.name?.charAt(0) || "U"} */}
-                  </div>
-                </div>
-
-                {/* Dropdown Content */}
-                <div
-                  tabIndex={0}
-                  className="dropdown-content menu z-[50] mt-3 w-64 p-3 shadow-2xl bg-base-100 border border-base-200 rounded-2xl space-y-3"
-                >
-                  {/* User Header Info */}
-                  <div className="flex items-center gap-3 px-2 py-1">
-                    <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-lg shadow-md shrink-0">
-                      {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                    </div>
-                    <div className="overflow-hidden">
-                      <h4 className="font-bold text-base-content text-sm truncate leading-tight">
-                        {user?.name || "User Name"}
-                      </h4>
-                      <p className="text-xs text-base-content/60 truncate mt-0.5">
-                        {user?.email || "user@example.com"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="divider my-0 h-[1px] bg-base-200"></div>
-
-                  {/* Menu Items */}
-                  <ul className="menu p-0 gap-1 text-sm font-medium">
-                    <li>
-                      <Link
-                        href="/dashboard/profile"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <User className="w-4 h-4 text-base-content/70" />
-                        My Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/dashboard"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <MdDashboard className="w-4 h-4 text-base-content/70" />
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/settings"
-                        className="py-2.5 px-3 rounded-xl hover:bg-base-200 transition-colors"
-                      >
-                        <Settings className="w-4 h-4 text-base-content/70" />
-                        Settings
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <div className="divider my-0 h-[1px] bg-base-200"></div>
-
-                  {/* Logout Button */}
-                  <button
-                    onClick={handleLogout}
-                    className="w-full btn btn-error btn-soft btn-sm flex items-center justify-center gap-2 rounded-xl text-xs font-semibold py-2.5"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Log Out
-                  </button>
-                </div>
-              </div>
-              /* Profile Dropdown End */
-            ) : (
-              <Link
-                href="/login"
-                className="text-gray-700 hover:text-blue-600 flex items-center justify-center"
-              >
-                <User className="h-6 w-6" />
-              </Link>
-            )}
-
-          </div>
         </div>
+
       </div>
 
-      {/* Mobile Drawer */}
-      {isMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white px-4 pt-2 pb-4 space-y-3">
-          <div className="relative w-full my-2">
-            <input
-              type="text"
-              placeholder="Search ClickMart..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-          </div>
-          <div className="flex flex-col space-y-2 text-base font-medium text-gray-700">
-            {links}
-          </div>
-        </div>
-      )}
-    </nav>
+      {/* ========================================================= */}
+      {/* 2. MOBILE LAYOUT (block md:hidden)                       */}
+      {/* ========================================================= */}
+      <MobileNavbar user={user} links={links} handleLogout={handleLogout} />
+
+    </header>
   );
 };
 
