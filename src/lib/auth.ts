@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { cookies } from "next/headers";
 import { verifyAccessToken, verifyRefreshToken } from "./jwt";
 import prisma from "./prisma";
@@ -9,8 +10,7 @@ export async function getCurrentUser() {
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
-   console.log("ACCESS TOKEN:", !!accessToken);
-  console.log("REFRESH TOKEN:", !!refreshToken);
+ 
 
   const findUser = async (id: string) => {
     const user = await prisma.user.findUnique({

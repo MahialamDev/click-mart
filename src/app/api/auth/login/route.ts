@@ -17,32 +17,35 @@ export async function POST(request: Request) {
 
     // if not found users
     if (!user) {
-      return Response.json({
-        success: false,
-        message: "Invalid Email or Password",
-      }),
-      { status: 401 }
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid Email or Password",
+        },
+        { status: 401 },
+      );
     }
 
     if (!user.password) {
-  return Response.json(
-    {
-      success: false,
-      message: "This account does not have a password login.",
-    },
-    { status: 401 }
-  );
-}
-
+      return NextResponse.json(
+        {
+          success: false,
+          message: "This account does not have a password login.",
+        },
+        { status: 401 },
+      );
+    }
 
     const matchedPassword = await bcrypt.compare(password, user.password);
 
     if (!matchedPassword) {
-      return Response.json({
-        success: false,
-        message: "Invalid Email or Password",
-      }),
-      { status: 401 }
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid Email or Password",
+        },
+        { status: 401 },
+      );
     }
 
     //generate access token
@@ -90,5 +93,12 @@ export async function POST(request: Request) {
     return response;
   } catch (err) {
     console.log(err);
+    return NextResponse.json(
+  {
+    success: false,
+    message: "Internal Server Error",
+  },
+  { status: 500 }
+);
   }
 }

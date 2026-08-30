@@ -11,7 +11,7 @@ import { CgProfile } from "react-icons/cg";
 type sideLink = {
   href: string;
   label: string;
-  icon: "profile" | "products" | "dashboard" | "users";
+  icon: "profile" | "product" | "dashboard" | "users";
 };
 
 // admin Link
