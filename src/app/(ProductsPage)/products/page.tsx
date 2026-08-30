@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { Star, ShoppingBag, Filter } from 'lucide-react';
+import Link from 'next/link';
+import axiosInstance from '@/Hooks/axiosInstance';
 
 const mockProducts = [
   { id: 1, title: 'Wireless Noise-Canceling Headphones', price: 199.99, category: 'Headset', rating: 5, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80' },
@@ -12,6 +14,8 @@ const mockProducts = [
 ];
 
 export default function ProductsPage() {
+
+  
   return (
     <div className="bg-base-100 min-h-screen py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -30,7 +34,8 @@ export default function ProductsPage() {
         {/* Product Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6">
           {mockProducts.map((p) => (
-            <div key={p.id} className="bg-base-100 border border-base-200 rounded-2xl p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+            <Link href={`/products/${p.id}`} key={p.id} className="bg-base-100 border border-base-200 rounded-2xl p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+             
               <div className="relative w-full h-48 bg-base-200 rounded-xl overflow-hidden mb-4">
                 <Image src={p.image} alt={p.title} fill className="object-contain p-2" />
               </div>
@@ -49,7 +54,7 @@ export default function ProductsPage() {
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setLoading, setUser } from '@/redux/features/auth/authSlice';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 type FormData = {
   email: string;
@@ -90,15 +91,30 @@ const LoginForm = () => {
   const params = useSearchParams();
   const router = useRouter();
   const callbackUrl = params.get("callbackUrl") || "/";
-  const dispatch = useDispatch()
-  const handleFormSubmit = async(data: FormData) => {
-     await axiosInstance.post(`/auth/login`, data)
-     // Login হওয়ার পর current user আনো
-    const response = await axiosInstance.get("/auth/me");
+  const dispatch = useDispatch();
+  const [btnLoading,setBtnLoading] = useState(false)
 
-    dispatch(setUser(response.data.data));
-    dispatch(setLoading(false));
-    router.push(callbackUrl)
+
+  // login handler
+  const handleFormSubmit = async (data: FormData) => {
+    try {
+      setBtnLoading(true)
+      await axiosInstance.post(`/auth/login`, data)
+      // Login হওয়ার পর current user আনো
+      const response = await axiosInstance.get("/auth/me");
+      console.log(response)
+      
+      dispatch(setUser(response.data.data));
+      dispatch(setLoading(false));
+      router.push(callbackUrl)
+    } catch (err) {
+      console.log(err)
+      setBtnLoading(false)
+      toast.error("Invalid email or password");
+    } finally { 
+      setBtnLoading(false)
+    }
+     
   
       
   };
@@ -151,12 +167,15 @@ const LoginForm = () => {
           </div>
 
           {/* Submit Button */}
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200"
+            className={`w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 ${btnLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={btnLoading}
           >
-            Sign In
-            <ArrowRight className="h-4 w-4" />
+            {btnLoading ? <p>Signing In </p> : <p>Sign In</p>}
+            {btnLoading ? <span className="loading loading-bars loading-xs"></span> : <ArrowRight className="h-4 w-4" />}
+           
           </button>
         </form>
 

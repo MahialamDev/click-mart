@@ -31,7 +31,7 @@ const SidebarNav = ({ links }: { links: SideLink[] }) => {
           const isActive = link.href === '/dashboard'
             ? pathName === '/dashboard'
             : pathName.startsWith(link.href)
-            console.log(isActive, 'from is active', pathName, link.href)
+          
           return (
             <Link
               key={link.href}

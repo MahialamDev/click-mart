@@ -47,7 +47,7 @@ export const authOptions = {
           data: {
             name: user.name || "Google User",
             email: user.email,
-            password: "",
+            password: null,
             imageUrl: user.image || null,
           },
         });

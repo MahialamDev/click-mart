@@ -17,18 +17,280 @@ enum Role {
   ADMIN
 }
 
-
 model User {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  imageUrl String?  // Optional field for profile image URL
-  updatedAt DateTime @updatedAt
+  email     String     @unique
+  password  String?
+  phone     String?
+  role      Role       @default(USER)
+  createdAt DateTime   @default(now())
+  imageUrl  String? // Optional field for profile image URL
+  updatedAt DateTime   @updatedAt
+  addresses Address[]
+  reviews   Reviews[]
+  orders    Order[]
+  cart      Cart?
+  wishlist  Wishlist[]
+  products Product[]
 }
 
 
 
+// product model
 
+
+
+
+model Product {
+  id            String   @id @default(cuid())
+
+  title         String
+  slug          String @unique
+  brand         String
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  costPrice     Float?
+  price         Float
+  originalPrice Float?
+  discount      String?
+
+  rating        Float    @default(0)
+  totalReviews  Int      @default(0)
+  totalSold     Int      @default(0)
+  stock         Int      @default(0)
+
+  sku           String   @unique
+  description   String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // কে Product add করেছে
+  addedById     String
+  addedBy       User     @relation(fields: [addedById], references: [id])
+
+  images        ProductImage[]
+  colors        ProductColor[]
+  features      ProductFeature[]
+  wishlist      Wishlist[]
+  reviews       Reviews[]
+  orderItem     OrderItem[]
+  cartItem      CartItem[]
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  image     String?
+  isActive  Boolean   @default(true)
+
+  products  Product[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  sortOrder Int      @default(0)
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+
+// product color
+model ProductColor {
+  id        String   @id @default(cuid())
+  name      String
+  className String?
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@unique([productId, name])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+
+  userId    String
+  productId String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
+
+model ProductFeature {
+  id        String   @id @default(cuid())
+  title     String
+  sortOrder Int      @default(0)
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+
+model Address {
+  id         String @id @default(cuid())
+  userId     String
+  user       User @relation(fields: [userId], references: [id])
+  title      String
+  name       String
+  phone      String
+  city       String
+  fullAddres String
+  order      Order[]
+}
+
+model Reviews {
+  id        String   @id @default(cuid())
+
+  rating    Int
+  comment   String
+  likes     Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // কে Review দিয়েছে
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  // কোন Product-এ Review দিয়েছে
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  // একজন User একটি Product-এ একবারই Review দিতে পারবে
+  @@unique([userId, productId])
+}
+
+
+
+// order model
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+  ONLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Order {
+  id              String        @id @default(cuid())
+
+  // Order কে করেছে
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+
+  // কোন Address-এ যাবে
+  addressId       String
+  address         Address       @relation(fields: [addressId], references: [id])
+
+  // টাকার হিসাব
+  subtotal        Float
+  deliveryCharge  Float         @default(0)
+  discount        Float         @default(0)
+  totalAmount     Float
+
+  // Order Status
+  status          OrderStatus   @default(PENDING)
+
+  // Payment
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+
+  // কখন Order হয়েছে
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Order-এর Products
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+
+  // কোন Order-এর item
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // কোন Product
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  // কতগুলো কিনেছে
+  quantity  Int
+
+  // Order করার সময় Product-এর বিক্রয় মূল্য
+  price     Float
+
+  // লাভ হিসাবের জন্য সেই সময়ের cost price
+  costPrice Float
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  quantity  Int      @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+}

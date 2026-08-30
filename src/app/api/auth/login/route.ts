@@ -20,8 +20,20 @@ export async function POST(request: Request) {
       return Response.json({
         success: false,
         message: "Invalid Email or Password",
-      });
+      }),
+      { status: 401 }
     }
+
+    if (!user.password) {
+  return Response.json(
+    {
+      success: false,
+      message: "This account does not have a password login.",
+    },
+    { status: 401 }
+  );
+}
+
 
     const matchedPassword = await bcrypt.compare(password, user.password);
 
@@ -29,7 +41,8 @@ export async function POST(request: Request) {
       return Response.json({
         success: false,
         message: "Invalid Email or Password",
-      });
+      }),
+      { status: 401 }
     }
 
     //generate access token

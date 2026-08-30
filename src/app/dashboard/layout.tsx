@@ -11,13 +11,13 @@ import { CgProfile } from "react-icons/cg";
 type sideLink = {
   href: string;
   label: string;
-  icon: "profile" | "product" | "dashboard" | "users";
+  icon: "profile" | "products" | "dashboard" | "users";
 };
 
 // admin Link
 const adminLink: sideLink[] = [
   { href: "/dashboard/profile", label: "Profile", icon: "profile" },
-  { href: "/dashboard/products", label: "Products", icon: "dashboard" },
+  
   { href: "/dashboard/users", label: "Users", icon: "users" },
 ];
 
@@ -25,6 +25,7 @@ const adminLink: sideLink[] = [
 const userLink: sideLink[] = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
   { href: "/dashboard/profile", label: "Profile", icon: "profile" },
+  { href: "/dashboard/products", label: "Products", icon: "dashboard" },
 ];
 
 const Layout = async ({ children }: { children: ReactNode }) => {

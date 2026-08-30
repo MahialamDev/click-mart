@@ -8,6 +8,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/Hooks/axiosInstance";
+import Link from "next/link";
 
 
 
@@ -277,12 +278,12 @@ const RegisterPage = () => {
         {/* Footer Link */}
         <p className="text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <a
-            href="#"
+          <Link
+            href="/login"
             className="font-semibold text-blue-600 hover:text-blue-500 transition-colors"
           >
             Sign in
-          </a>
+          </Link>
         </p>
 
         <div>
