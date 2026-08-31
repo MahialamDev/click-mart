@@ -15,6 +15,7 @@ export async function GET() {
     const refreshToken = cookieStore.get("refreshToken")?.value;
 
     let userId: string;
+    let newAccessToken: string | null = null;
 
     // ==========================================
     // 1. Access Token Check
@@ -62,13 +63,11 @@ export async function GET() {
       }
 
       // নতুন access token
-      await generateAccessToken({
+      newAccessToken = await generateAccessToken({
         userId: decodedRefresh.userId,
         email: decodedRefresh.email,
         role: decodedRefresh.role,
       });
-
-      
 
       userId = decodedRefresh.userId;
     }
@@ -105,10 +104,22 @@ export async function GET() {
     // 4. Return User
     // ==========================================
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: user,
     });
+
+    if (newAccessToken) {
+      response.cookies.set("accessToken", newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NEXTAUTH_URL === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 15,
+      });
+    }
+
+    return response;
   } catch (error) {
     console.error("ME API ERROR:", error);
 

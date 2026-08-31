@@ -42,6 +42,18 @@ export interface AddedBy {
   email: string;
 }
 
+export interface Review {
+  id: string;
+  user?: string;
+  userName?: string;
+  avatar?: string;
+  rating: number;
+  date?: string;
+  createdAt?: string;
+  comment: string;
+  likes?: number;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -75,4 +87,5 @@ export interface Product {
   colors: ProductColor[];
   features: ProductFeature[];
   addedBy: AddedBy;
+  reviews?: Review[];
 }

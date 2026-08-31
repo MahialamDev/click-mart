@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 import { cookies } from "next/headers";
-import { verifyAccessToken, verifyRefreshToken } from "./jwt";
+import { generateAccessToken, verifyAccessToken, verifyRefreshToken } from "./jwt";
 import prisma from "./prisma";
 import { User } from "@/redux/features/auth/authSlice";
 
@@ -57,6 +57,8 @@ export async function getCurrentUser() {
 
   // এখানে নতুন token generate/set করবে না
   // কারণ এটা Server Component থেকেও call হতে পারে
+
+
 
   return findUser(decodedRefresh.userId);
 }

@@ -1,5 +1,5 @@
 'use client';
-
+// this is for refarance and i hovae create already 8 components in product/details
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { 
