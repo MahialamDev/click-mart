@@ -37,9 +37,10 @@ const ProductActions = ({ colors, stock, id }: ProductActionsProps) => {
     }
   };
 
-  const handleAddToCart = async(productId:string) => { 
+  const handleAddToCart = async (productId: string) => { 
+    const selectedColorName = colors[selectedColor]?.name;
     const sendInfo = { 
-      productId, quantity
+      productId, quantity, color: selectedColorName
     }
     const res = await axiosInstance.post(`/cart`, sendInfo)
     if (res?.data?.success) { 

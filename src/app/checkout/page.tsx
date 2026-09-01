@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import axiosInstance from '@/Hooks/axiosInstance';
 
 type RootState = {
   auth: {
@@ -42,31 +43,29 @@ interface Address {
 
 interface CartItem {
   id: string;
+  productId: string;
   name: string;
   price: number;
   quantity: number;
-  image: string;
-  color: string;
+  image: string | null;
+  color?: string;
 }
 
-const dummyOrderItems: CartItem[] = [
-  {
-    id: '1',
-    name: 'Wireless Noise-Canceling Headphones',
-    price: 4500,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=200&q=80',
-    color: 'Matte Black',
-  },
-  {
-    id: '2',
-    name: 'Smart Watch Series 8 GPS',
-    price: 3200,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=200&q=80',
-    color: 'Space Grey',
-  },
-];
+interface ApiCartItem {
+  id: string;
+  quantity: number;
+  color: string,
+  product: {
+    id: string;
+    title: string;
+    price: number;
+    images?: {
+      url: string;
+    }[];
+  };
+}
+
+
 
 const initialAddresses: Address[] = [
   {
@@ -95,6 +94,10 @@ export default function CheckoutPage() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+
+  const [orderItems, setOrderItems] = useState<CartItem[]>([]);
+const [cartLoading, setCartLoading] = useState(true);
+
   const router = useRouter();
   
   const [addressForm, setAddressForm] = useState({
@@ -104,6 +107,39 @@ export default function CheckoutPage() {
     city: 'Dhaka',
     fullAddress: '',
   });
+
+  useEffect(() => {
+  const getCart = async () => {
+    try {
+      setCartLoading(true);
+
+      const res = await axiosInstance.get("/cart");
+
+      const items = res.data?.data?.items || [];
+
+      const formattedItems: CartItem[] = items.map(
+        (item: ApiCartItem) => ({
+          id: item.id,
+          productId: item.product.id,
+          name: item.product.title,
+          price: item.product.price,
+          quantity: item.quantity,
+          image: item.product.images?.[0]?.url || null,
+          color: item.color
+        }),
+      );
+
+      setOrderItems(formattedItems);
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
+      setOrderItems([]);
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
+  getCart();
+}, []);
 
   useEffect(() => {
     if (reduxUser) {
@@ -118,7 +154,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
   const [onlineProvider, setOnlineProvider] = useState<'bkash' | 'nagad' | 'rocket' | 'card'>('bkash');
 
-  const subtotal = dummyOrderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const subtotal = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryCharge = 70;
   const grandTotal = subtotal + deliveryCharge;
 
@@ -357,14 +393,14 @@ export default function CheckoutPage() {
             {/* Ordered Items Preview List */}
             <div className="bg-base-100 border border-base-300 p-5 rounded-2xl space-y-4 shadow-sm">
               <h3 className="font-bold text-sm border-b border-base-300 pb-3 flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4 text-primary" /> Items in Order ({dummyOrderItems.length})
+                <ShoppingBag className="w-4 h-4 text-primary" /> Items in Order ({orderItems.length})
               </h3>
 
               <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
-                {dummyOrderItems.map((item) => (
+                {orderItems.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 p-2 bg-base-200/50 rounded-xl border border-base-300">
                     <div className="relative w-14 h-14 bg-base-100 rounded-lg overflow-hidden shrink-0 border border-base-300">
-                      <Image src={item.image} alt={item.name} fill className="object-contain p-1" />
+                      <Image src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' alt={item.name} fill className="object-contain p-1" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-xs truncate text-base-content">{item.name}</h4>

@@ -4,7 +4,9 @@ import prisma from "@/lib/prisma";
 export async function POST(request: Request) {
   try {
     // payload
-    const {productId, quantity=1 } = await request.json();
+    const { productId, quantity = 1, color } = await request.json();
+
+    console.log(productId, quantity, color)
 
     // validate cart and productid
     if (!productId) {
@@ -63,6 +65,7 @@ export async function POST(request: Request) {
 
         data: {
           quantity: existingItem.quantity + quantity,
+          color
         },
       });
     } else {
@@ -71,6 +74,7 @@ export async function POST(request: Request) {
           cartId: cart.id,
           productId,
           quantity,
+          color
         },
       });
     }
@@ -140,7 +144,7 @@ export async function GET() {
           select: {
             id: true,
             quantity: true,
-
+            color: true,
             product: {
               select: {
                 id: true,
@@ -148,6 +152,7 @@ export async function GET() {
                 price: true,
                 originalPrice: true,
                 sku: true,
+                
 
                 images: {
                   select: {
