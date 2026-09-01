@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
@@ -15,48 +15,61 @@ import {
   Minus,
   CreditCard
 } from 'lucide-react';
+import axiosInstance from '@/Hooks/axiosInstance';
+import { toast } from 'react-hot-toast';
 
 interface CartItem {
   id: string;
-  name: string;
+  productId: string;
+  title: string;
   price: number;
   originalPrice: number;
-  image: string;
+  image: string | null;
   quantity: number;
   sku: string;
-  color: string;
+  color?: string;
 }
 
-const initialItems: CartItem[] = [
-  {
-    id: '1',
-    name: 'Wireless Noise-Canceling Headphones',
-    price: 4500,
-    originalPrice: 5200,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80',
-    quantity: 1,
-    sku: 'EB-HP-01',
-    color: 'Matte Black'
-  },
-  {
-    id: '2',
-    name: 'Smart Watch Series 8 GPS With Extra Strap',
-    price: 3200,
-    originalPrice: 3800,
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80',
-    quantity: 2,
-    sku: 'EB-SW-08',
-    color: 'Space Grey'
-  }
-];
+
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialItems);
   const [deliveryZone, setDeliveryZone] = useState<'inside' | 'outside'>('inside');
   const [coupon, setCoupon] = useState('');
-  const [discount, setDiscount] = useState(0);
+  const [ discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
+ useEffect(() => {
+  const getCart = async () => {
+    try {
+      setLoading(true)
+      const res = await axiosInstance.get("/cart");
+
+      const items = res.data.data.items || [];
+
+      const formattedItems: CartItem[] = items.map((item: any) => ({
+        id: item.id,
+        productId: item.product.id,
+        title: item.product.title,
+        price: item.product.price,
+        originalPrice: item.product.originalPrice,
+        image: item.product.images?.[0]?.url || null,
+        quantity: item.quantity,
+        sku: item.product.sku,
+      }));
+
+      setCartItems(formattedItems);
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  getCart();
+}, []);
   // Delivery Charges (BDT)
   const deliveryCharge = deliveryZone === 'inside' ? 70 : 130;
 
@@ -90,9 +103,17 @@ export default function CartPage() {
       setDiscount(Math.round(subtotal * 0.1));
       setCouponApplied(true);
     } else {
-      alert('Invalid Promo Code! Try "ELECT10"');
+      toast.error('Invalid Promo Code! Try "ELECT10"');
     }
   };
+
+  if (loading) {
+  return (
+    <div className="bg-base-200 min-h-screen flex items-center justify-center">
+      <span className="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  );
+}
 
   if (cartItems.length === 0) {
     return (
@@ -102,7 +123,7 @@ export default function CartPage() {
             <ShoppingBag className="w-10 h-10" />
           </div>
           <h2 className="text-2xl font-black">Your Shopping Cart is Empty!</h2>
-          <p className="text-xs text-base-content/70">Looks like you haven't added anything to your cart yet.</p>
+          <p className="text-xs text-base-content/70">Looks like you haven&apos;t added anything to your cart yet.</p>
           <Link href="/products" className="btn btn-primary text-primary-content font-bold border-none rounded-xl">
             Continue Shopping
           </Link>
@@ -155,10 +176,10 @@ export default function CartPage() {
                 {/* Product Info */}
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                   <div className="relative w-20 h-20 bg-base-200 rounded-xl overflow-hidden shrink-0 border border-base-300">
-                    <Image src={item.image} alt={item.name} fill className="object-contain p-2" />
+                    <Image src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' alt={item.title} fill className="object-contain p-2" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-base-content line-clamp-1">{item.name}</h4>
+                    <h4 className="font-bold text-xs sm:text-sm text-base-content line-clamp-1">{item.title}</h4>
                     <p className="text-[11px] text-base-content/70">Color: <span className="text-base-content font-medium">{item.color}</span> | SKU: {item.sku}</p>
                     <div className="flex items-baseline gap-2 pt-0.5">
                       <span className="text-sm font-bold text-primary">৳{item.price.toLocaleString()}</span>

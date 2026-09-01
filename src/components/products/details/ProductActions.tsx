@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 import { ShoppingCart, Heart, Share2, Check } from 'lucide-react';
 import { ProductColor } from '@/types/product';
 import { toast } from 'react-hot-toast';
+import axiosInstance from '@/Hooks/axiosInstance';
 
 interface ProductActionsProps {
   colors: ProductColor[];
   stock: number;
+  id: string
 }
 
-const ProductActions = ({ colors, stock }: ProductActionsProps) => {
+const ProductActions = ({ colors, stock, id }: ProductActionsProps) => {
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -34,6 +36,16 @@ const ProductActions = ({ colors, stock }: ProductActionsProps) => {
       toast.success('Link copied to clipboard!');
     }
   };
+
+  const handleAddToCart = async(productId:string) => { 
+    const sendInfo = { 
+      productId, quantity
+    }
+    const res = await axiosInstance.post(`/cart`, sendInfo)
+    if (res?.data?.success) { 
+      toast.success("Added To Cart")
+    }
+  }
 
   return (
     <div className="space-y-6 pt-2">
@@ -100,6 +112,7 @@ const ProductActions = ({ colors, stock }: ProductActionsProps) => {
           </div>
 
           <button
+            onClick={()=>handleAddToCart(id)}
             type="button"
             className="btn btn-primary flex-1 gap-2 rounded-xl font-bold shadow-lg shadow-primary/20"
             disabled={stock <= 0}

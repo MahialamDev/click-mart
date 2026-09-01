@@ -15,6 +15,8 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+
+
 async function getProduct(slug: string): Promise<Product | null> {
   try {
     // Extract ID from slug (e.g., "rahat-basic-i8l7252yulxc8krq99eu6cde" -> "i8l7252yulxc8krq99eu6cde")
@@ -26,6 +28,16 @@ async function getProduct(slug: string): Promise<Product | null> {
     console.error('Failed to fetch product:', error);
     return null;
   }
+}
+
+function getProductId(slug: string): string {
+  const id = slug.split("-").pop();
+
+  if (!id) {
+    notFound();
+  }
+
+  return id;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -64,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const product = await getProduct(slug);
-
+  const id = getProductId(slug)
   if (!product) {
     notFound();
   }
@@ -98,6 +110,7 @@ export default async function Page({ params }: Props) {
             <ProductActions
               colors={product.colors || []}
               stock={product.stock}
+              id={ id}
             />
 
             <ProductServiceBadges />

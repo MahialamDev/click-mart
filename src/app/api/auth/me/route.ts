@@ -112,7 +112,7 @@ export async function GET() {
     if (newAccessToken) {
       response.cookies.set("accessToken", newAccessToken, {
         httpOnly: true,
-        secure: process.env.NEXTAUTH_URL === "production",
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 15,
