@@ -30,6 +30,23 @@ interface CartItem {
   color?: string;
 }
 
+interface ApiCartItem {
+  id: string;
+  quantity: number;
+
+  product: {
+    id: string;
+    title: string;
+    price: number;
+    originalPrice: number;
+    sku: string;
+
+    images: {
+      url: string;
+    }[];
+  };
+}
+
 
 
 export default function CartPage() {
@@ -48,7 +65,7 @@ export default function CartPage() {
 
       const items = res.data.data.items || [];
 
-      const formattedItems: CartItem[] = items.map((item: any) => ({
+      const formattedItems: CartItem[] = items.map((item: ApiCartItem) => ({
         id: item.id,
         productId: item.product.id,
         title: item.product.title,
