@@ -111,6 +111,7 @@ const PopularProducts = () => {
                         src={item.image}
                         alt={item.title}
                         fill
+                        sizes="300px"
                         className="object-contain"
                       />
                     </div>
@@ -157,6 +158,7 @@ const PopularProducts = () => {
                 src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80"
                 alt="Nikon Lens Banner"
                 fill
+                sizes="300px"
                 className="object-cover opacity-60"
               />
               <div className="relative z-10 max-w-md space-y-2">

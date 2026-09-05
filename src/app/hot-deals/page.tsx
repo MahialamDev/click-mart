@@ -33,7 +33,7 @@ export default function DealsPage() {
               <p className="text-xs text-slate-400">$350.00 <span className="line-through text-slate-500">$400.00</span></p>
             </div>
             <div className="relative w-32 h-32">
-              <Image src="https://images.unsplash.com/photo-1605901309584-828e34709657?auto=format&fit=crop&w=300&q=80" alt="Controller" fill className="object-contain" />
+              <Image src="https://images.unsplash.com/photo-1605901309584-828e34709657?auto=format&fit=crop&w=300&q=80" alt="Controller" fill sizes='300px' className="object-contain" />
             </div>
           </div>
 

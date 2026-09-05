@@ -53,6 +53,7 @@ const HeroSection = () => {
                 src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1200&q=80"
                 alt="VR Gaming Hero"
                 fill
+                 sizes="100vw"
                 priority
                 className="object-cover object-left opacity-80"
               />
@@ -111,6 +112,7 @@ const HeroSection = () => {
                     src="https://images.unsplash.com/photo-1605901309584-828e34709657?auto=format&fit=crop&w=300&q=80"
                     alt="Xbox Controller"
                     fill
+                    sizes='300px'
                     className="object-contain"
                   />
                 </div>

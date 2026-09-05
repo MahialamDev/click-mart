@@ -11,3 +11,5 @@ export async function logoutUser() {
 
   return response.data;
 }
+
+// aUTH PAGE

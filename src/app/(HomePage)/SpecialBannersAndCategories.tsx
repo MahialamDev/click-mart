@@ -62,6 +62,7 @@ const SpecialBannersAndCategories = () => {
                 src="https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=400&q=80"
                 alt="Smart Speaker"
                 fill
+                sizes='300px'
                 className="object-contain"
               />
             </div>
