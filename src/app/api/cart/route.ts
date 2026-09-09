@@ -207,5 +207,6 @@ export async function DELETE(request: Request) {
   const device = request.headers.get("user-agent");
   console.log(cookie, device);
 
+  // delete  user
   return Response.json("OK");
 }
