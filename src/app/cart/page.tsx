@@ -105,7 +105,7 @@ export default function CartPage() {
 
   // Remove Item Handler
   const removeItem = (id: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    axiosInstance.delete(`/cart?id=${id}`)
   };
 
   // Calculations

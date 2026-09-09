@@ -198,3 +198,14 @@ export async function GET() {
     );
   }
 }
+
+
+export async function DELETE(request: Request) {
+  console.log("deleted");
+
+  const cookie = request.headers.get("cookie");
+  const device = request.headers.get("user-agent");
+  console.log(cookie, device);
+
+  return Response.json("OK");
+}
