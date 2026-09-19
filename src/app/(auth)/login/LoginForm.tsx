@@ -10,6 +10,7 @@ import { setLoading, setUser } from '@/redux/features/auth/authSlice';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 
+// form type
 type FormData = {
   email: string;
   password: string;
